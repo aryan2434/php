@@ -4,40 +4,41 @@ include('./resourses/database.php');
 include('./resourses/header.php');
 
 $errors = [];
-$name = $age = '';
+$username = '';
+$email = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve form data
     $id = $_POST['id'];
-    $name = $_POST['name'];
-    $age = $_POST['age'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
 
     // Validate form data
-    if (empty($name) || empty($age)) {
-        $errors[] = "Name and age are required.";
+    if (empty($username) || empty($email)) {
+        $errors[] = "Username and email are required.";
     } else {
-        // Update friend data in the database
-        $sql = "UPDATE friendlist SET Name = ?, Age = ? WHERE ID = ?";
+        // Update user data in the database
+        $sql = "UPDATE userd SET username = ?, email = ? WHERE ID = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$name, $age, $id]);
+        $stmt->execute([$username, $email, $id]);
 
-        // Redirect back to the friend list page
+        // Redirect back to the user list page
         header('Location: friendlist.php');
         exit();
     }
 } elseif (isset($_GET['id'])) {
-    // data for pre-filling the form
+    // Data for pre-filling the form
     $id = $_GET['id'];
-    $sql = "SELECT * FROM friendlist WHERE ID = ?";
+    $sql = "SELECT * FROM userd WHERE ID = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
-    $friend = $stmt->fetch();
+    $user = $stmt->fetch();
 
-    if ($friend) {
-        $name = $friend['Name'];
-        $age = $friend['Age'];
+    if ($user) {
+        $username = $user['username'];
+        $email = $user['email'];
     } else {
-        //  if Friend not found, redirect to the friend list page
+        // If user not found, redirect to the user list page
         header('Location: friendlist.php');
         exit();
     }
@@ -45,23 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Edit Friend</h2>
-    <!-- form for edit friend -->
+    <h2 class="mb-4">Edit User</h2>
+    <!-- Form to edit user -->
     <form method="post" action="editfriend.php">
         <input type="hidden" name="id" value="<?= $id ?>">
         <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" value="<?= $name ?>" required>
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?= $username ?>" required>
         </div>
         <div class="form-group">
-            <label for="age">Age:</label>
-            <input type="number" class="form-control" id="age" name="age" value="<?= $age ?>" required>
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?= $email ?>" required>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Update Friend</button>
+            <button type="submit" class="btn btn-primary">Update User</button>
         </div>
     </form>
-    <!-- error handling -->
+    <!-- Error handling -->
     <?php if (!empty($errors)) : ?>
         <div class="alert alert-danger">
             <ul>
@@ -72,5 +73,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 </div>
-<!-- insert footer -->
+<!-- Insert footer -->
 <?php include('./resourses/footer.php'); ?>
