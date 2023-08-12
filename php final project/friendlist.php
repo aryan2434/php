@@ -16,7 +16,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Password</th> <!-- Again, note the security concern here. -->
+                <th>Password</th> 
                 <th>Email</th>
                 <th>Action</th>
             </tr>
@@ -26,7 +26,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <td><?= $user['ID'] ?></td>
                     <td><?= $user['username'] ?></td>
-                    <td><?= $user['password'] ?></td> <!-- This should not be displayed in a real-world application -->
+                    <td><?= $user['password'] ?></td> 
                     <td><?= $user['email'] ?></td>
                     <td>
                         <a href="editfriend.php?id=<?= $user['ID'] ?>" class="btn btn-primary btn-sm">Edit</a>
